@@ -1,0 +1,30 @@
+# Referencia (no versionar)
+backend_nestjs/
+
+# Dependencias / build
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+
+# Entorno y secretos
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# IDE / SO
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Opcional local
+gym_app.postman_collection.json
