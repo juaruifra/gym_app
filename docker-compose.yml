@@ -26,12 +26,13 @@ services:
     image: yobasystems/alpine-mariadb:11.4.5
     container_name: gym_app-mysqldb
     restart: unless-stopped
+    command: ["--default-time-zone=+00:00"]
     environment:
       - MYSQL_DATABASE=${DB_DATABASE}
       - MYSQL_USER=${DB_USER}
       - MYSQL_PASSWORD=${DB_PASSWORD}
       - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
-      - TZ=Europe/Madrid
+      - TZ=UTC
     volumes:
     - mariadb_data:/var/lib/mysql
     ports:

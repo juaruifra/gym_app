@@ -8,6 +8,7 @@ import { Usuario } from '../usuario/usuario.entity';
 import { CreateReservaDto, UpdateReservaDto } from './reserva.dto';
 import { Reserva } from './reserva.entity';
 import { ReservaResponseDto } from './reserva-response.dto';
+import { toSpainDateTime } from '../common/utils/datetime.util';
 
 @Injectable()
 export class ReservaService {
@@ -126,7 +127,7 @@ export class ReservaService {
   private toResponseDto(reserva: Reserva): ReservaResponseDto {
     return {
       id: reserva.id,
-      fechaReserva: reserva.fechaReserva,
+      fechaReserva: toSpainDateTime(reserva.fechaReserva),
       estado: reserva.estado,
       usuarioId: reserva.usuarioId,
       claseId: reserva.claseId,

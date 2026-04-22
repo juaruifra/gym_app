@@ -20,6 +20,6 @@ export class UsuarioResponseDto {
   @ApiProperty({ enum: RolUsuario, example: RolUsuario.CLIENTE })
   rol!: RolUsuario;
 
-  @ApiProperty({ example: '2026-04-22T10:00:00.000Z' })
-  fechaRegistro!: Date;
+  @ApiProperty({ example: '2026-04-22 12:00:00' })
+  fechaRegistro!: string;
 }

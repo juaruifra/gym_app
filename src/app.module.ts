@@ -20,6 +20,7 @@ import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
+      timezone: process.env.DB_TIMEZONE ?? 'Z',
       autoLoadEntities: true,
       synchronize: true,
     }),

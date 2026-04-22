@@ -5,6 +5,7 @@ import { CreateUsuarioDto, UpdateUsuarioDto } from './usuario.dto';
 import { Usuario } from './usuario.entity';
 import { UsuarioResponseDto } from './usuario-response.dto';
 import * as bcrypt from 'bcrypt';
+import { toSpainDateTime } from '../common/utils/datetime.util';
 
 @Injectable()
 export class UsuarioService {
@@ -83,7 +84,7 @@ export class UsuarioService {
       email: usuario.email,
       telefono: usuario.telefono,
       rol: usuario.rol,
-      fechaRegistro: usuario.fechaRegistro,
+      fechaRegistro: toSpainDateTime(usuario.fechaRegistro),
     };
   }
 }

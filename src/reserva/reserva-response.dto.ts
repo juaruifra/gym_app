@@ -30,8 +30,8 @@ export class ReservaResponseDto {
   @ApiProperty({ example: 1 })
   id!: number;
 
-  @ApiProperty({ example: '2026-04-22T10:00:00.000Z' })
-  fechaReserva!: Date;
+  @ApiProperty({ example: '2026-04-22 12:00:00' })
+  fechaReserva!: string;
 
   @ApiProperty({ enum: EstadoReserva, example: EstadoReserva.ACTIVA })
   estado!: EstadoReserva;
