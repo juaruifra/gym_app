@@ -2,6 +2,7 @@ import { EstadoReserva } from '../common/enums/estado-reserva.enum';
 
 const reservaData = [
   {
+    // Reservas iniciales para probar listados y relaciones.
     id: 1,
     estado: EstadoReserva.ACTIVA,
     usuarioId: 2,

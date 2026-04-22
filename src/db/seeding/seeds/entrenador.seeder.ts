@@ -7,6 +7,7 @@ export class EntrenadorSeeder implements Seeder {
   public async run(dataSource: DataSource): Promise<void> {
     const repository = dataSource.getRepository(Entrenador);
 
+    // Se actualiza por email para mantener idempotencia.
     await repository.upsert(entrenadorData, ['email']);
     console.log('Seeding de entrenadores completado');
   }

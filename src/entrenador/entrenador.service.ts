@@ -13,6 +13,7 @@ export class EntrenadorService {
   ) {}
 
   async create(createEntrenadorDto: CreateEntrenadorDto) {
+    // Evitamos duplicados por email desde el alta.
     const existing = await this.entrenadorRepository.findOne({
       where: { email: createEntrenadorDto.email },
     });
@@ -45,6 +46,7 @@ export class EntrenadorService {
     }
 
     if (updateEntrenadorDto.email && updateEntrenadorDto.email !== entrenador.email) {
+      // Si cambian email, comprobamos otra vez unicidad.
       const existing = await this.entrenadorRepository.findOne({
         where: { email: updateEntrenadorDto.email },
       });
@@ -68,6 +70,7 @@ export class EntrenadorService {
   }
 
   private toResponseDto(entrenador: Entrenador): EntrenadorResponseDto {
+    // Salida limpia para API (solo lo necesario).
     return {
       id: entrenador.id,
       nombre: entrenador.nombre,

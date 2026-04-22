@@ -15,6 +15,7 @@ import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'mysql',
+      // La conexión se toma del .env para no acoplar credenciales al código.
       host: process.env.DB_HOST,
       port: parseInt(process.env.DB_PORT ?? '3306', 10),
       username: process.env.DB_USER,
@@ -22,6 +23,7 @@ import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
       database: process.env.DB_DATABASE,
       timezone: process.env.DB_TIMEZONE ?? 'Z',
       autoLoadEntities: true,
+      // En desarrollo crea/actualiza tablas automáticamente.
       synchronize: true,
     }),
     UsuarioModule,
@@ -33,6 +35,7 @@ import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
   providers: [
     AppService,
     {
+      // Formato único para todos los errores de la API.
       provide: APP_FILTER,
       useClass: AllExceptionsFilter,
     },

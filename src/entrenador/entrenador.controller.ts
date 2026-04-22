@@ -23,6 +23,7 @@ export class EntrenadorController {
   @Get(':id')
   @ApiOperation({ summary: 'Obtener entrenador por ID' })
   @ApiParam({ name: 'id', type: Number })
+  // Validamos el parámetro en el controlador para simplificar el servicio.
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.entrenadorService.findOne(id);
   }

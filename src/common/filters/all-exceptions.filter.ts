@@ -17,6 +17,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
 
+    // Si ya es una excepción HTTP, respetamos su código.
     const isHttpException = exception instanceof HttpException;
     const status = isHttpException
       ? exception.getStatus()
@@ -30,11 +31,13 @@ export class AllExceptionsFilter implements ExceptionFilter {
           (exception instanceof Error ? exception.message : 'Error no controlado')
       : 'Error interno del servidor';
 
+    // Dejamos traza en logs para depurar rápido en caso de fallo.
     this.logger.error(
       `${request.method} ${request.url} -> ${status}`,
       exception instanceof Error ? exception.stack : undefined,
     );
 
+    // Respuesta uniforme para que frontend/postman siempre reciban el mismo formato.
     response.status(status).json({
       statusCode: status,
       timestamp: new Date().toISOString(),

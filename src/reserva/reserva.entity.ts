@@ -33,6 +33,7 @@ export class Reserva {
   @Column({ name: 'clase_id', type: 'int' })
   claseId!: number;
 
+  // Cada reserva pertenece a un único usuario.
   @ManyToOne(() => Usuario, (usuario) => usuario.reservas, {
     nullable: false,
     onDelete: 'RESTRICT',
@@ -40,6 +41,7 @@ export class Reserva {
   @JoinColumn({ name: 'usuario_id' })
   usuario!: Usuario;
 
+  // Cada reserva apunta a una única clase.
   @ManyToOne(() => Clase, (clase) => clase.reservas, {
     nullable: false,
     onDelete: 'RESTRICT',

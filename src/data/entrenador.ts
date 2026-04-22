@@ -1,5 +1,6 @@
 const entrenadorData = [
   {
+    // Entrenador de alto rendimiento.
     id: 1,
     nombre: 'Laura',
     apellidos: 'Martinez Ruiz',
@@ -9,6 +10,7 @@ const entrenadorData = [
     activo: true,
   },
   {
+    // Perfil orientado a clases de movilidad.
     id: 2,
     nombre: 'David',
     apellidos: 'Santos Perez',

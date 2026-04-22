@@ -32,6 +32,7 @@ export class Entrenador {
   @Column({ type: 'boolean', default: true })
   activo!: boolean;
 
+  // Un entrenador puede impartir varias clases.
   @OneToMany(() => Clase, (clase) => clase.entrenador)
   clases!: Clase[];
 }

@@ -23,6 +23,7 @@ export class ReservaController {
   @Get(':id')
   @ApiOperation({ summary: 'Obtener reserva por ID' })
   @ApiParam({ name: 'id', type: Number })
+  // El id se valida aquí para evitar errores aguas abajo.
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.reservaService.findOne(id);
   }

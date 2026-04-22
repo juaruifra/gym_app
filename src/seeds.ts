@@ -29,12 +29,14 @@ const dataSource = new DataSource(options);
 dataSource
   .initialize()
   .then(async () => {
+    // Sincroniza esquema y luego carga datos iniciales.
     await dataSource.synchronize();
     await runSeeders(dataSource);
     await dataSource.destroy();
     process.exit(0);
   })
   .catch(async (error) => {
+    // Cerramos conexión también cuando hay error para no dejar recursos abiertos.
     console.error('Error inicializando la fuente de datos', error);
     if (dataSource.isInitialized) {
       await dataSource.destroy();

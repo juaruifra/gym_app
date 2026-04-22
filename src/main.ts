@@ -5,19 +5,19 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  // NestExpressApplication para especificar que usamos Express (por defecto)
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  // usar pipes de validación globales 
+  // Validamos todo lo que entra a la API desde un único punto.
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
       transform: true,
-      forbidNonWhitelisted: true, // rechaza campos extra con 400
+      // Si llegan campos no esperados, devolvemos 400 para evitar basura en BD.
+      forbidNonWhitelisted: true,
     }),
   );
 
-  // Config de Swagger (sólo en desarrollo)
+  // Swagger solo en desarrollo para no exponer docs en producción.
   const isDev = process.env.NODE_ENV === 'development';
 
   if (isDev) {
@@ -33,13 +33,14 @@ async function bootstrap() {
 
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('api/docs', app, document, {
-      swaggerOptions: { persistAuthorization: true }, // para mantener el token al recargar
+      // Mantiene el token al recargar la página de Swagger.
+      swaggerOptions: { persistAuthorization: true },
     });
   }
 
   const webserverPort = process.env.WEB_SERVER_PORT || '3000';
-    const port = process.env.PORT ?? 3000;
-    await app.listen(port);
-    console.log(`Server running on port ${webserverPort}. Swagger ${isDev ? 'enabled at /api/docs' : 'disabled'}`);
+  const port = process.env.PORT ?? 3000;
+  await app.listen(port);
+  console.log(`Server running on port ${webserverPort}. Swagger ${isDev ? 'enabled at /api/docs' : 'disabled'}`);
 }
 bootstrap();

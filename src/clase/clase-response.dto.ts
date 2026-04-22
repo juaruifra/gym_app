@@ -13,6 +13,7 @@ class ClaseEntrenadorResumenDto {
 }
 
 export class ClaseResponseDto {
+  // DTO que devuelve los datos de la clase ya listos para frontend.
   @ApiProperty({ example: 1 })
   id!: number;
 

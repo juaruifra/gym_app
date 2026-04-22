@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class EntrenadorResponseDto {
+  // Contrato de salida para listar y consultar entrenadores.
   @ApiProperty({ example: 1 })
   id!: number;
 

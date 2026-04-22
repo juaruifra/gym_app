@@ -23,6 +23,7 @@ export class UsuarioController {
   @Get(':id')
   @ApiOperation({ summary: 'Obtener usuario por ID' })
   @ApiParam({ name: 'id', type: Number })
+  // ParseIntPipe evita que llegue un id no numérico al servicio.
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.usuarioService.findOne(id);
   }

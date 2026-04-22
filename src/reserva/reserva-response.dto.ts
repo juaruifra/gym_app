@@ -27,6 +27,7 @@ class ReservaClaseResumenDto {
 }
 
 export class ReservaResponseDto {
+  // Formato final que devuelve la API para una reserva.
   @ApiProperty({ example: 1 })
   id!: number;
 

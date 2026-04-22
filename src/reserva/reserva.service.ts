@@ -22,6 +22,7 @@ export class ReservaService {
   ) {}
 
   async create(createReservaDto: CreateReservaDto) {
+    // Validamos que usuario y clase existan antes de reservar.
     const usuario = await this.usuarioRepository.findOne({
       where: { id: createReservaDto.usuarioId },
     });
@@ -44,6 +45,7 @@ export class ReservaService {
       throw new BadRequestException('No hay plazas disponibles para esta clase');
     }
 
+    // Al reservar, consumimos una plaza.
     clase.plazasDisponibles -= 1;
     await this.claseRepository.save(clase);
 
@@ -113,6 +115,7 @@ export class ReservaService {
     }
 
     if (reserva.estado !== EstadoReserva.CANCELADA) {
+      // Si la reserva estaba activa, devolvemos la plaza a la clase.
       const clase = await this.claseRepository.findOne({ where: { id: reserva.claseId } });
       if (clase && clase.plazasDisponibles < clase.aforoMaximo) {
         clase.plazasDisponibles += 1;
@@ -125,6 +128,7 @@ export class ReservaService {
   }
 
   private toResponseDto(reserva: Reserva): ReservaResponseDto {
+    // Incluimos resúmenes de usuario y clase para facilitar consumo en cliente.
     return {
       id: reserva.id,
       fechaReserva: toSpainDateTime(reserva.fechaReserva),

@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { RolUsuario } from '../common/enums/rol.enum';
 
 export class UsuarioResponseDto {
+  // Este DTO marca la salida pública (sin password).
   @ApiProperty({ example: 1 })
   id!: number;
 

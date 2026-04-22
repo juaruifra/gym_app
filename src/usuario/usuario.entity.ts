@@ -23,6 +23,7 @@ export class Usuario {
   email!: string;
 
   @ApiProperty({ example: 'P@ssword123' })
+  // Exclude evita que la contraseña salga en serializaciones por error.
   @Exclude()
   @Column({ type: 'varchar', length: 255 })
   password!: string;
@@ -39,6 +40,7 @@ export class Usuario {
   @CreateDateColumn({ name: 'fecha_registro' })
   fechaRegistro!: Date;
 
+  // Un usuario puede tener muchas reservas.
   @OneToMany(() => Reserva, (reserva) => reserva.usuario)
   reservas!: Reserva[];
 }

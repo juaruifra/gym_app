@@ -2,6 +2,7 @@ import { RolUsuario } from '../common/enums/rol.enum';
 
 const usuarioData = [
   {
+    // Usuario administrador para pruebas iniciales.
     id: 1,
     nombre: 'Admin',
     apellidos: 'Gym App',
@@ -11,6 +12,7 @@ const usuarioData = [
     rol: RolUsuario.ADMIN,
   },
   {
+    // Clientes de ejemplo para simular reservas reales.
     id: 2,
     nombre: 'Juan',
     apellidos: 'Ruiz Perez',

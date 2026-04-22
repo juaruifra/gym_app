@@ -2,6 +2,7 @@ import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { IsBoolean, IsEmail, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 
 export class CreateEntrenadorDto {
+  // Nombre y apellidos mínimos para evitar datos basura.
   @ApiProperty({ example: 'Laura' })
   @IsString()
   @MinLength(2)
@@ -19,6 +20,7 @@ export class CreateEntrenadorDto {
   @MaxLength(100)
   especialidad!: string;
 
+  // Email profesional único del entrenador.
   @ApiProperty({ example: 'laura@coach.com' })
   @IsEmail()
   email!: string;

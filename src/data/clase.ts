@@ -2,6 +2,7 @@ import { EstadoClase } from '../common/enums/estado-clase.enum';
 
 const claseData = [
   {
+    // Clase con dos plazas ya ocupadas por reservas de prueba.
     id: 1,
     nombre: 'Spinning Avanzado',
     descripcion: 'Clase intensa de ciclismo indoor',

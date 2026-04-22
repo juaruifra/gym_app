@@ -3,6 +3,7 @@ import { IsEmail, IsEnum, IsOptional, IsString, MaxLength, MinLength } from 'cla
 import { RolUsuario } from '../common/enums/rol.enum';
 
 export class CreateUsuarioDto {
+  // Pedimos un nombre realista para evitar valores vacíos o muy cortos.
   @ApiProperty({ example: 'Juan' })
   @IsString()
   @MinLength(2)
@@ -15,10 +16,12 @@ export class CreateUsuarioDto {
   @MaxLength(120)
   apellidos!: string;
 
+  // Email válido: será el identificador de login.
   @ApiProperty({ example: 'juan@email.com' })
   @IsEmail()
   email!: string;
 
+  // Contraseña con mínimo de seguridad básico.
   @ApiProperty({ example: 'P@ssword123' })
   @IsString()
   @MinLength(8)

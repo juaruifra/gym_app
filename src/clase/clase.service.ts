@@ -13,10 +13,12 @@ export class ClaseService {
   ) {}
 
   async create(createClaseDto: CreateClaseDto) {
+    // Regla básica: la clase debe terminar después de empezar.
     this.validateTimeRange(createClaseDto.horaInicio, createClaseDto.horaFin);
 
     const dto = { ...createClaseDto };
     if (dto.plazasDisponibles === undefined) {
+      // Si no viene este dato, asumimos aforo completo disponible.
       dto.plazasDisponibles = dto.aforoMaximo;
     }
     if (dto.plazasDisponibles > dto.aforoMaximo) {
@@ -25,6 +27,7 @@ export class ClaseService {
 
     const clase = this.claseRepository.create(dto);
     const saved = await this.claseRepository.save(clase);
+    // Recargamos relación entrenador para devolver respuesta más útil.
     const withRelations = await this.claseRepository.findOne({
       where: { id: saved.id },
       relations: ['entrenador'],
@@ -63,6 +66,7 @@ export class ClaseService {
 
     const aforoMaximo = updateClaseDto.aforoMaximo ?? clase.aforoMaximo;
     const plazasDisponibles = updateClaseDto.plazasDisponibles ?? clase.plazasDisponibles;
+    // Nunca puede haber más plazas disponibles que aforo total.
     if (plazasDisponibles > aforoMaximo) {
       throw new BadRequestException('plazasDisponibles no puede ser mayor que aforoMaximo');
     }
@@ -88,6 +92,7 @@ export class ClaseService {
   }
 
   private toResponseDto(clase: Clase): ClaseResponseDto {
+    // Enriquecemos la salida con un resumen del entrenador si está cargado.
     return {
       id: clase.id,
       nombre: clase.nombre,

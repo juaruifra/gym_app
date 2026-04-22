@@ -8,6 +8,7 @@ export class UsuarioSeeder implements Seeder {
   public async run(dataSource: DataSource): Promise<void> {
     const repository = dataSource.getRepository(Usuario);
 
+    // Hasheamos también en seed para no guardar contraseñas planas.
     const rows = await Promise.all(
       usuarioData.map(async (item) => ({
         ...item,
@@ -15,6 +16,7 @@ export class UsuarioSeeder implements Seeder {
       })),
     );
 
+    // Upsert permite ejecutar seed varias veces sin duplicar.
     await repository.upsert(rows, ['email']);
     console.log('Seeding de usuarios completado');
   }

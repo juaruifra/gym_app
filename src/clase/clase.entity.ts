@@ -46,6 +46,7 @@ export class Clase {
   @Column({ name: 'entrenador_id', type: 'int' })
   entrenadorId!: number;
 
+  // Varias clases pueden pertenecer al mismo entrenador.
   @ManyToOne(() => Entrenador, (entrenador) => entrenador.clases, {
     nullable: false,
     onDelete: 'RESTRICT',
@@ -53,6 +54,7 @@ export class Clase {
   @JoinColumn({ name: 'entrenador_id' })
   entrenador!: Entrenador;
 
+  // Una clase puede tener muchas reservas de usuarios.
   @OneToMany(() => Reserva, (reserva) => reserva.clase)
   reservas!: Reserva[];
 }

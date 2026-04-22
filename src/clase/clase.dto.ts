@@ -3,6 +3,7 @@ import { IsDateString, IsEnum, IsInt, IsOptional, IsString, MaxLength, Min } fro
 import { EstadoClase } from '../common/enums/estado-clase.enum';
 
 export class CreateClaseDto {
+  // Fecha y horas se validan para mantener coherencia del horario.
   @ApiProperty({ example: 'Spinning Avanzado' })
   @IsString()
   @MaxLength(120)
@@ -41,6 +42,7 @@ export class CreateClaseDto {
   @IsEnum(EstadoClase)
   estado?: EstadoClase;
 
+  // Referencia al entrenador que imparte esta clase.
   @ApiProperty({ example: 1 })
   @IsInt()
   entrenadorId!: number;

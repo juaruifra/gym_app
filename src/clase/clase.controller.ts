@@ -23,6 +23,7 @@ export class ClaseController {
   @Get(':id')
   @ApiOperation({ summary: 'Obtener clase por ID' })
   @ApiParam({ name: 'id', type: Number })
+  // Parseamos el id aquí para que el servicio reciba ya un número.
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.claseService.findOne(id);
   }

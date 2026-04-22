@@ -15,6 +15,7 @@ export class UsuarioService {
   ) {}
 
   async create(createUsuarioDto: CreateUsuarioDto) {
+    // Antes de crear, comprobamos que el email no exista ya.
     const existing = await this.usuarioRepository.findOne({
       where: { email: createUsuarioDto.email },
     });
@@ -22,6 +23,7 @@ export class UsuarioService {
       throw new ConflictException('Ya existe un usuario con ese email');
     }
 
+    // Nunca guardamos la contraseña en texto plano.
     const password = await bcrypt.hash(createUsuarioDto.password, 10);
     const usuario = this.usuarioRepository.create({
       ...createUsuarioDto,
@@ -33,6 +35,7 @@ export class UsuarioService {
   }
 
   findAll() {
+    // Devolvemos DTO para ocultar campos sensibles como password.
     return this.usuarioRepository.find().then((usuarios) => usuarios.map((usuario) => this.toResponseDto(usuario)));
   }
 
@@ -51,6 +54,7 @@ export class UsuarioService {
     }
 
     if (updateUsuarioDto.email && updateUsuarioDto.email !== entity.email) {
+      // Si cambia el email, volvemos a validar que siga siendo único.
       const existing = await this.usuarioRepository.findOne({
         where: { email: updateUsuarioDto.email },
       });
@@ -60,6 +64,7 @@ export class UsuarioService {
     }
 
     if (updateUsuarioDto.password) {
+      // Si se actualiza, también se guarda hasheada.
       updateUsuarioDto.password = await bcrypt.hash(updateUsuarioDto.password, 10);
     }
 
@@ -77,6 +82,7 @@ export class UsuarioService {
   }
 
   private toResponseDto(usuario: Usuario): UsuarioResponseDto {
+    // Aquí decidimos exactamente qué campos salen al cliente.
     return {
       id: usuario.id,
       nombre: usuario.nombre,
