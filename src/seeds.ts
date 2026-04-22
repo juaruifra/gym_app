@@ -11,6 +11,7 @@ import { EntrenadorSeeder } from './db/seeding/seeds/entrenador.seeder';
 import { ReservaSeeder } from './db/seeding/seeds/reserva.seeder';
 import { UsuarioSeeder } from './db/seeding/seeds/usuario.seeder';
 
+// Recuperamos configuración de .env para no acoplar credenciales al código.
 config();
 
 const options: DataSourceOptions & SeederOptions = {
