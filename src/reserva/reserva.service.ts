@@ -72,6 +72,15 @@ export class ReservaService {
     return reservas.map((reserva) => this.toResponseDto(reserva));
   }
 
+  // Devuelve las reservas de un usuario concreto por su ID.
+  async findByUsuario(usuarioId: number) {
+    const reservas = await this.reservaRepository.find({
+      where: { usuarioId },
+      relations: ['usuario', 'clase'],
+    });
+    return reservas.map((reserva) => this.toResponseDto(reserva));
+  }
+
   async findOne(id: number) {
     const reserva = await this.reservaRepository.findOne({
       where: { id },

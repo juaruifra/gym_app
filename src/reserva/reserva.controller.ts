@@ -26,6 +26,17 @@ export class ReservaController {
     return this.reservaService.create(createReservaDto, user.sub);
   }
 
+  // El cliente consulta su propio historial sin ver las reservas de otros.
+  @Get('mis-reservas')
+  @Roles(RolUsuario.CLIENTE)
+  @ApiOperation({ summary: 'Ver mis reservas (CLIENTE)' })
+  @ApiResponse({ status: 200, description: 'Lista de reservas del usuario autenticado' })
+  @ApiResponse({ status: 401, description: 'No autenticado' })
+  @ApiResponse({ status: 403, description: 'Sin permiso (requiere CLIENTE)' })
+  findMine(@CurrentUser() user: JwtPayload) {
+    return this.reservaService.findByUsuario(user.sub);
+  }
+
   // Solo el admin puede ver todas las reservas del sistema.
   @Get()
   @Roles(RolUsuario.ADMIN)
