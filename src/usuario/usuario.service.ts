@@ -81,6 +81,12 @@ export class UsuarioService {
     return { message: `Usuario ${id} eliminado` };
   }
 
+  // Usado por AuthService para verificar credenciales en el login.
+  // Devuelve la entidad completa (con password) para poder comparar el hash.
+  async findOneByEmail(email: string): Promise<Usuario | null> {
+    return this.usuarioRepository.findOne({ where: { email } });
+  }
+
   private toResponseDto(usuario: Usuario): UsuarioResponseDto {
     // Aquí decidimos exactamente qué campos salen al cliente.
     return {

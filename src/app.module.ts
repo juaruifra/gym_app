@@ -1,5 +1,5 @@
-import { Module } from '@nestjs/common';
-import { APP_FILTER } from '@nestjs/core';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
@@ -8,7 +8,11 @@ import { UsuarioModule } from './usuario/usuario.module';
 import { EntrenadorModule } from './entrenador/entrenador.module';
 import { ClaseModule } from './clase/clase.module';
 import { ReservaModule } from './reserva/reserva.module';
+import { AuthModule } from './auth/auth.module';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
+import { LoggerMiddleware } from './common/middleware/logger.middleware';
+import { JwtAuthGuard } from './auth/guard/jwt-auth.guard';
+import { RolesGuard } from './auth/guard/roles.guard';
 
 @Module({
   imports: [
@@ -26,6 +30,7 @@ import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
       // En desarrollo crea/actualiza tablas automáticamente.
       synchronize: true,
     }),
+    AuthModule,
     UsuarioModule,
     EntrenadorModule,
     ClaseModule,
@@ -39,6 +44,21 @@ import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
       provide: APP_FILTER,
       useClass: AllExceptionsFilter,
     },
+    {
+      // JwtAuthGuard actúa primero: verifica el token (o deja pasar si @Public()).
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    {
+      // RolesGuard actúa segundo: comprueba el rol del payload contra @Roles().
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    // LoggerMiddleware se aplica a todas las rutas.
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}

@@ -1,6 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { JwtPayload } from '../auth/interface/jwt-payload.interface';
+import { RolUsuario } from '../common/enums/rol.enum';
 import { Clase } from '../clase/clase.entity';
 import { EstadoClase } from '../common/enums/estado-clase.enum';
 import { EstadoReserva } from '../common/enums/estado-reserva.enum';
@@ -21,7 +23,11 @@ export class ReservaService {
     private readonly claseRepository: Repository<Clase>,
   ) {}
 
-  async create(createReservaDto: CreateReservaDto) {
+  // usuarioId viene del token JWT (forzado en el controlador), no del body.
+  async create(createReservaDto: CreateReservaDto, usuarioIdFromToken: number) {
+    // Ignoramos el usuarioId que pueda traer el DTO y usamos siempre el del token.
+    createReservaDto.usuarioId = usuarioIdFromToken;
+
     // Validamos que usuario y clase existan antes de reservar.
     const usuario = await this.usuarioRepository.findOne({
       where: { id: createReservaDto.usuarioId },
@@ -105,13 +111,21 @@ export class ReservaService {
     return this.toResponseDto(saved);
   }
 
-  async remove(id: number) {
+  async remove(id: number, currentUser: JwtPayload) {
     const reserva = await this.reservaRepository.findOne({
       where: { id },
       relations: ['usuario', 'clase'],
     });
     if (!reserva) {
       throw new NotFoundException(`Reserva ${id} no encontrada`);
+    }
+
+    // Un CLIENTE solo puede eliminar sus propias reservas; el ADMIN puede eliminar cualquiera.
+    if (
+      currentUser.rol === RolUsuario.CLIENTE &&
+      reserva.usuarioId !== currentUser.sub
+    ) {
+      throw new ForbiddenException('Solo puedes cancelar tus propias reservas');
     }
 
     if (reserva.estado !== EstadoReserva.CANCELADA) {

@@ -3,8 +3,9 @@ import { IsEnum, IsInt, IsOptional } from 'class-validator';
 import { EstadoReserva } from '../common/enums/estado-reserva.enum';
 
 export class CreateReservaDto {
-  // Relación con el usuario que hace la reserva.
-  @ApiProperty({ example: 1 })
+  // El usuarioId lo inyecta el servicio desde el token JWT; no debe enviarlo el cliente.
+  // Se mantiene en el DTO para que TypeORM pueda asignarlo internamente.
+  @IsOptional()
   @IsInt()
   usuarioId!: number;
 
