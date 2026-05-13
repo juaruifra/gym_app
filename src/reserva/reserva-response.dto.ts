@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { EstadoReserva } from '../common/enums/estado-reserva.enum';
 
+// Datos mínimos del usuario que se incluyen en la respuesta de reserva.
 class ReservaUsuarioResumenDto {
   @ApiProperty({ example: 1 })
   id!: number;
@@ -12,6 +13,7 @@ class ReservaUsuarioResumenDto {
   email!: string;
 }
 
+// Datos mínimos de la clase que se incluyen en la respuesta de reserva.
 class ReservaClaseResumenDto {
   @ApiProperty({ example: 1 })
   id!: number;

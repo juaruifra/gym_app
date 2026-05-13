@@ -102,6 +102,7 @@ export class ReservaService {
     }
 
     if (updateReservaDto.usuarioId) {
+      // Si cambia el usuario, verificamos que el nuevo existe.
       const usuario = await this.usuarioRepository.findOne({ where: { id: updateReservaDto.usuarioId } });
       if (!usuario) {
         throw new NotFoundException(`Usuario ${updateReservaDto.usuarioId} no encontrado`);
@@ -109,6 +110,7 @@ export class ReservaService {
     }
 
     if (updateReservaDto.claseId) {
+      // Si cambia la clase, verificamos que la nueva existe.
       const clase = await this.claseRepository.findOne({ where: { id: updateReservaDto.claseId } });
       if (!clase) {
         throw new NotFoundException(`Clase ${updateReservaDto.claseId} no encontrada`);

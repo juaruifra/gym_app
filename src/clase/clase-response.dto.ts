@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { EstadoClase } from '../common/enums/estado-clase.enum';
 
+// Resumen del entrenador que se incrusta dentro de la respuesta de clase.
 class ClaseEntrenadorResumenDto {
   @ApiProperty({ example: 1 })
   id!: number;
