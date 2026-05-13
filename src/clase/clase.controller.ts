@@ -44,6 +44,7 @@ export class ClaseController {
     return this.claseService.findOne(id);
   }
 
+  // Solo el admin puede actualizar clases.
   @Patch(':id')
   @Roles(RolUsuario.ADMIN)
   @ApiBearerAuth('access-token')
@@ -58,6 +59,7 @@ export class ClaseController {
     return this.claseService.update(id, updateClaseDto);
   }
 
+  // Solo el admin puede eliminar clases.
   @Delete(':id')
   @Roles(RolUsuario.ADMIN)
   @ApiBearerAuth('access-token')
