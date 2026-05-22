@@ -1,98 +1,195 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Gym App — Backend API REST
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Backend de gestión de gimnasio desarrollado con **NestJS** y **TypeORM**. Permite gestionar usuarios, entrenadores, clases y reservas a través de una API REST con autenticación JWT y control de acceso por roles.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## Tecnologías utilizadas
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- **NestJS** — framework backend
+- **TypeORM** — ORM para el mapeo de entidades
+- **MariaDB** — base de datos relacional
+- **Docker** — contenerización del entorno completo
+- **Swagger** — documentación interactiva de la API
+- **class-validator** — validaciones en DTOs
+- **bcrypt** — cifrado de contraseñas
+- **typeorm-extension** — seeders de datos iniciales
+- **JWT** — autenticación mediante tokens
 
-## Project setup
+---
 
-```bash
-$ npm install
-```
+## Requisitos previos
 
-## Compile and run the project
+- Archivo `.env` configurado en la raíz del proyecto (ver sección de configuración)
+- Docker instalado según tu sistema operativo:
+
+**Windows**
+Instalar [Docker Desktop](https://www.docker.com/products/docker-desktop/). Incluye tanto el motor de Docker como Docker Compose, y tiene interfaz gráfica. Hay que tenerlo abierto antes de ejecutar cualquier comando.
+
+**Linux**
+No es necesario instalar Docker Desktop. Se instala directamente el motor de Docker (Docker Engine) y el plugin de Compose desde el repositorio oficial:
 
 ```bash
-# development
-$ npm run start
+# Instalar Docker Engine
+curl -fsSL https://get.docker.com | sh
 
-# watch mode
-$ npm run start:dev
+# Añadir tu usuario al grupo docker para no necesitar sudo
+sudo usermod -aG docker $USER
+newgrp docker
 
-# production mode
-$ npm run start:prod
+# Instalar el plugin de Compose (si no viene incluido)
+sudo apt install docker-compose-plugin
 ```
 
-## Run tests
+---
+
+## Configuración del entorno
+
+Crear un archivo `.env` en la raíz del proyecto con las siguientes variables:
+
+```env
+DB_HOST=database
+DB_PORT=3306
+DB_USER=gymuser
+DB_PASSWORD=gympassword
+DB_DATABASE=gymdb
+DB_ROOT_PASSWORD=rootpassword
+DB_TIMEZONE=Z
+JWT_SECRET=tu_clave_secreta
+JWT_EXPIRES_IN=1d
+NODE_ENV=development
+WEB_SERVER_PORT=8000
+PMA_SECRET=clave_para_phpmyadmin
+```
+
+---
+
+## Arrancar el proyecto
+
+El comando es el mismo en ambos sistemas operativos:
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+docker compose up -d
 ```
 
-## Deployment
+Esto levanta los tres contenedores: el backend en el puerto configurado en `WEB_SERVER_PORT`, MariaDB y phpMyAdmin. No hace falta instalar Node ni ninguna dependencia en la máquina local.
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+> **Windows**: asegúrate de que Docker Desktop está abierto antes de ejecutar el comando.  
+> **Linux**: si acabas de añadir tu usuario al grupo `docker`, puede que necesites cerrar y volver a abrir el terminal.
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+---
+
+## Cargar datos iniciales (seeders)
+
+Una vez que los contenedores estén en marcha, ejecutar dentro del contenedor del backend:
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+docker exec -it gym_app npm run seed
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Esto crea en la base de datos los usuarios, entrenadores, clases y reservas de ejemplo. Se puede ejecutar varias veces sin problema, no genera duplicados.
 
-## Resources
+---
 
-Check out a few resources that may come in handy when working with NestJS:
+## Accesos
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+| Servicio | URL |
+|---|---|
+| API REST | http://localhost:8000 |
+| Swagger (documentación) | http://localhost:8000/api/docs |
+| phpMyAdmin | http://localhost:9090 |
 
-## Support
+> Swagger solo está disponible cuando `NODE_ENV=development` en el `.env`.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+---
 
-## Stay in touch
+## Usuarios de prueba
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Estos usuarios se crean al ejecutar los seeders:
 
-## License
+| Email | Contraseña | Rol |
+|---|---|---|
+| admin@gymapp.com | Admin123* | ADMIN |
+| juan@email.com | Cliente123* | CLIENTE |
+| maria@email.com | Cliente123* | CLIENTE |
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+---
+
+## Módulos y endpoints principales
+
+### Auth
+| Método | Endpoint | Acceso | Descripción |
+|---|---|---|---|
+| POST | /auth/register | Público | Registro de nuevo usuario (rol CLIENTE) |
+| POST | /auth/login | Público | Login, devuelve el token JWT |
+| GET | /auth/me | JWT válido | Devuelve el perfil del usuario autenticado |
+
+### Usuarios
+| Método | Endpoint | Acceso | Descripción |
+|---|---|---|---|
+| POST | /usuarios | ADMIN | Crear usuario |
+| GET | /usuarios | ADMIN | Listar usuarios |
+| GET | /usuarios/:id | ADMIN | Obtener usuario por ID |
+| PATCH | /usuarios/:id | ADMIN | Actualizar usuario |
+| DELETE | /usuarios/:id | ADMIN | Eliminar usuario |
+
+### Entrenadores
+| Método | Endpoint | Acceso | Descripción |
+|---|---|---|---|
+| POST | /entrenadores | ADMIN | Crear entrenador |
+| GET | /entrenadores | Público | Listar entrenadores |
+| GET | /entrenadores/:id | Público | Obtener entrenador por ID |
+| PATCH | /entrenadores/:id | ADMIN | Actualizar entrenador |
+| DELETE | /entrenadores/:id | ADMIN | Eliminar entrenador |
+
+### Clases
+| Método | Endpoint | Acceso | Descripción |
+|---|---|---|---|
+| POST | /clases | ADMIN | Crear clase |
+| GET | /clases | Público | Listar clases |
+| GET | /clases/:id | Público | Obtener clase por ID |
+| PATCH | /clases/:id | ADMIN | Actualizar clase |
+| DELETE | /clases/:id | ADMIN | Eliminar clase |
+
+### Reservas
+| Método | Endpoint | Acceso | Descripción |
+|---|---|---|---|
+| POST | /reservas | CLIENTE | Crear reserva (el usuario se toma del token) |
+| GET | /reservas/mis-reservas | CLIENTE | Ver mis reservas |
+| GET | /reservas | ADMIN | Listar todas las reservas |
+| GET | /reservas/:id | ADMIN | Obtener reserva por ID |
+| PATCH | /reservas/:id | ADMIN | Actualizar reserva |
+| DELETE | /reservas/:id | CLIENTE / ADMIN | Cancelar reserva (el cliente solo puede cancelar la suya) |
+
+---
+
+## Seguridad
+
+- Todos los endpoints están protegidos por defecto mediante `JwtAuthGuard`.
+- Los endpoints públicos llevan el decorador `@Public()`.
+- La autorización por roles se gestiona con `RolesGuard` y el decorador `@Roles()`.
+- Las contraseñas se cifran con bcrypt antes de guardarse en la base de datos.
+- El token JWT debe enviarse en la cabecera `Authorization` con el formato `Bearer <token>`.
+
+---
+
+## Estructura del proyecto
+
+```
+src/
+├── auth/           # Login, registro, guards y decoradores de seguridad
+├── usuario/        # Gestión de usuarios
+├── entrenador/     # Gestión de entrenadores
+├── clase/          # Gestión de clases
+├── reserva/        # Gestión de reservas
+├── common/         # Enums, filtros, middleware y utilidades compartidas
+├── data/           # Datos de prueba para los seeders
+└── db/             # Seeders organizados por entidad
+```
+
+---
+
+## Autor
+
+Juan Antonio Ruiz Francés — Proyecto Recuperación Acceso a Datos, 2.º DAM
+
